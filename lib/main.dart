@@ -29,7 +29,7 @@ void main() {
           const PolicePayrollApp(), // Set the root widget of the app to PolicePayrollApp.
     ),
   );
-} //
+} 
 
 class PolicePayrollApp extends StatelessWidget {
   const PolicePayrollApp(
