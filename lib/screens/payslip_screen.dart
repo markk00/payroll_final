@@ -1,34 +1,39 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
-import '../models/employee_provider.dart';
-import '../models/attendance_provider.dart';
-import '../models/payroll_provider.dart';
+import 'package:flutter/material.dart'; // Import Flutter material design package.
+import 'package:provider/provider.dart'; // Import Provider package for state management.
+import 'package:intl/intl.dart'; // Import Intl package for date formatting.
+import '../models/employee_provider.dart'; // Import EmployeeProvider model.
+import '../models/attendance_provider.dart'; // Import AttendanceProvider model.
+import '../models/payroll_provider.dart'; // Import PayrollProvider model.
 
 class PayslipScreen extends StatefulWidget {
-  const PayslipScreen({super.key});
+  const PayslipScreen({super.key}); // Constructor for PayslipScreen widget.
 
   @override
-  _PayslipScreenState createState() => _PayslipScreenState();
+  _PayslipScreenState createState() =>
+      _PayslipScreenState(); // Create state for PayslipScreen.
 }
 
 class _PayslipScreenState extends State<PayslipScreen> {
-  final _formKey = GlobalKey<FormState>();
-  String? _selectedEmployeeId;
-  DateTime _payPeriodStart = DateTime.now().subtract(const Duration(days: 30));
-  DateTime _payPeriodEnd = DateTime.now();
+  final _formKey = GlobalKey<FormState>(); // Key for the form.
+  String? _selectedEmployeeId; // Selected employee ID.
+  DateTime _payPeriodStart = DateTime.now()
+      .subtract(const Duration(days: 30)); // Start date of the pay period.
+  DateTime _payPeriodEnd = DateTime.now(); // End date of the pay period.
 
   @override
   Widget build(BuildContext context) {
-    final employeeProvider = Provider.of<EmployeeProvider>(context);
-    final attendanceProvider = Provider.of<AttendanceProvider>(context);
-    final payrollProvider = Provider.of<PayrollProvider>(context);
+    final employeeProvider =
+        Provider.of<EmployeeProvider>(context); // Access EmployeeProvider.
+    final attendanceProvider =
+        Provider.of<AttendanceProvider>(context); // Access AttendanceProvider.
+    final payrollProvider =
+        Provider.of<PayrollProvider>(context); // Access PayrollProvider.
 
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(24.0), // Padding around the content.
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -41,7 +46,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
                             : Colors.black87,
                       ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 24), // Spacing between elements.
                 Card(
                   elevation: 0,
                   shape: RoundedRectangleBorder(
@@ -49,22 +54,27 @@ class _PayslipScreenState extends State<PayslipScreen> {
                     side: BorderSide(color: Colors.grey.shade300),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(24),
+                    padding:
+                        const EdgeInsets.all(24), // Padding inside the card.
                     child: Form(
                       key: _formKey,
                       child: Column(
                         children: [
-                          _buildEmployeeDropdown(employeeProvider),
-                          const SizedBox(height: 16),
-                          _buildDateRangePicker(context),
-                          const SizedBox(height: 24),
+                          _buildEmployeeDropdown(
+                              employeeProvider), // Employee dropdown widget.
+                          const SizedBox(
+                              height: 16), // Spacing between elements.
+                          _buildDateRangePicker(
+                              context), // Date range picker widget.
+                          const SizedBox(
+                              height: 24), // Spacing between elements.
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () => _generatePayslip(
                                   employeeProvider,
                                   attendanceProvider,
-                                  payrollProvider),
+                                  payrollProvider), // Generate payslip on button press.
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
                                 padding:
@@ -74,7 +84,8 @@ class _PayslipScreenState extends State<PayslipScreen> {
                                 ),
                               ),
                               child: const Text('Generate Payslip',
-                                  style: TextStyle(fontSize: 16)),
+                                  style:
+                                      TextStyle(fontSize: 16)), // Button text.
                             ),
                           ),
                         ],
@@ -82,7 +93,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 32), // Spacing between elements.
                 Text(
                   'Pay Slips',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -90,8 +101,9 @@ class _PayslipScreenState extends State<PayslipScreen> {
                         color: Colors.blue[800],
                       ),
                 ),
-                const SizedBox(height: 16),
-                _buildPayslipList(payrollProvider, employeeProvider),
+                const SizedBox(height: 16), // Spacing between elements.
+                _buildPayslipList(
+                    payrollProvider, employeeProvider), // Payslip list widget.
               ],
             ),
           ),
@@ -105,7 +117,8 @@ class _PayslipScreenState extends State<PayslipScreen> {
       value: _selectedEmployeeId,
       decoration: InputDecoration(
         labelText: 'Select Employee',
-        prefixIcon: const Icon(Icons.person, color: Colors.grey),
+        prefixIcon: const Icon(Icons.person,
+            color: Colors.grey), // Icon for the dropdown.
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: Colors.grey.shade300),
@@ -122,15 +135,17 @@ class _PayslipScreenState extends State<PayslipScreen> {
       items: employeeProvider.employees.map((employee) {
         return DropdownMenuItem<String>(
           value: employee.id,
-          child: Text(employee.name),
+          child: Text(employee.name), // Dropdown menu item text.
         );
       }).toList(),
       onChanged: (value) {
         setState(() {
-          _selectedEmployeeId = value;
+          _selectedEmployeeId = value; // Update selected employee ID.
         });
       },
-      validator: (value) => value == null ? 'Please select an employee' : null,
+      validator: (value) => value == null
+          ? 'Please select an employee'
+          : null, // Validation for the dropdown.
     );
   }
 
@@ -146,15 +161,16 @@ class _PayslipScreenState extends State<PayslipScreen> {
         );
         if (picked != null) {
           setState(() {
-            _payPeriodStart = picked.start;
-            _payPeriodEnd = picked.end;
+            _payPeriodStart = picked.start; // Update start date.
+            _payPeriodEnd = picked.end; // Update end date.
           });
         }
       },
       child: InputDecorator(
         decoration: InputDecoration(
           labelText: 'Pay Period',
-          prefixIcon: const Icon(Icons.date_range, color: Colors.grey),
+          prefixIcon: const Icon(Icons.date_range,
+              color: Colors.grey), // Icon for the date range picker.
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: Colors.grey.shade300),
@@ -169,7 +185,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
           ),
         ),
         child: Text(
-          '${DateFormat('yyyy-MM-dd').format(_payPeriodStart)} to ${DateFormat('yyyy-MM-dd').format(_payPeriodEnd)}',
+          '${DateFormat('yyyy-MM-dd').format(_payPeriodStart)} to ${DateFormat('yyyy-MM-dd').format(_payPeriodEnd)}', // Display selected date range.
         ),
       ),
     );
@@ -178,24 +194,31 @@ class _PayslipScreenState extends State<PayslipScreen> {
   Widget _buildPayslipList(
       PayrollProvider payrollProvider, EmployeeProvider employeeProvider) {
     return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: payrollProvider.payslips.length,
+      shrinkWrap: true, // Prevents ListView from expanding infinitely.
+      physics:
+          const NeverScrollableScrollPhysics(), // Disables scrolling for ListView.
+      itemCount: payrollProvider.payslips.length, // Number of payslips.
       itemBuilder: (context, index) {
-        final payslip = payrollProvider.payslips[index];
-        final employee = employeeProvider.getEmployee(payslip.employeeId);
+        final payslip =
+            payrollProvider.payslips[index]; // Get payslip at index.
+        final employee = employeeProvider
+            .getEmployee(payslip.employeeId); // Get employee details.
         return Card(
           elevation: 2,
-          margin: const EdgeInsets.symmetric(vertical: 8),
+          margin: const EdgeInsets.symmetric(
+              vertical: 8), // Margin around the card.
           child: ListTile(
             leading: CircleAvatar(
-              child: Text(employee.name[0]),
+              child: Text(
+                  employee.name[0]), // Display first letter of employee name.
             ),
-            title: Text(employee.name),
+            title: Text(employee.name), // Employee name.
             subtitle: Text(
-                '${DateFormat('yyyy-MM-dd').format(payslip.payPeriodStart)} to ${DateFormat('yyyy-MM-dd').format(payslip.payPeriodEnd)}'),
-            trailing: Text('\$${payslip.totalPay.toStringAsFixed(2)}'),
-            onTap: () => _showPayslipDetails(context, payslip, employee),
+                '${DateFormat('yyyy-MM-dd').format(payslip.payPeriodStart)} to ${DateFormat('yyyy-MM-dd').format(payslip.payPeriodEnd)}'), // Pay period.
+            trailing:
+                Text('\$${payslip.totalPay.toStringAsFixed(2)}'), // Total pay.
+            onTap: () => _showPayslipDetails(
+                context, payslip, employee), // Show payslip details on tap.
           ),
         );
       },
@@ -205,21 +228,27 @@ class _PayslipScreenState extends State<PayslipScreen> {
   void _generatePayslip(EmployeeProvider employeeProvider,
       AttendanceProvider attendanceProvider, PayrollProvider payrollProvider) {
     if (_formKey.currentState!.validate()) {
-      final employee = employeeProvider.getEmployee(_selectedEmployeeId!);
+      // Validate form.
+      final employee = employeeProvider
+          .getEmployee(_selectedEmployeeId!); // Get selected employee.
       final attendanceRecords = attendanceProvider
           .getEmployeeAttendance(_selectedEmployeeId!)
           .where((a) =>
               a.date.isAfter(_payPeriodStart) && a.date.isBefore(_payPeriodEnd))
-          .toList();
+          .toList(); // Get attendance records within the pay period.
 
-      double totalHoursWorked =
-          attendanceRecords.fold(0, (sum, a) => sum + a.hoursWorked);
-      double overtimeHours =
-          totalHoursWorked > 160 ? totalHoursWorked - 160 : 0;
-      double overtimePay = overtimeHours * (employee.baseSalary / 160) * 1.5;
+      double totalHoursWorked = attendanceRecords.fold(
+          0, (sum, a) => sum + a.hoursWorked); // Calculate total hours worked.
+      double overtimeHours = totalHoursWorked > 160
+          ? totalHoursWorked - 160
+          : 0; // Calculate overtime hours.
+      double overtimePay = overtimeHours *
+          (employee.baseSalary / 160) *
+          1.5; // Calculate overtime pay.
       double deductions =
           employee.baseSalary * 0.1; // Assuming 10% deductions for taxes, etc.
-      double incentives = totalHoursWorked > 180 ? 100 : 0; // Example incentive
+      double incentives =
+          totalHoursWorked > 180 ? 100 : 0; // Example incentive.
 
       Payslip payslip = Payslip(
         employeeId: employee.id,
@@ -229,12 +258,17 @@ class _PayslipScreenState extends State<PayslipScreen> {
         overtimePay: overtimePay,
         deductions: deductions,
         incentives: incentives,
-        totalPay: employee.baseSalary + overtimePay - deductions + incentives,
+        totalPay: employee.baseSalary +
+            overtimePay -
+            deductions +
+            incentives, // Calculate total pay.
       );
 
-      payrollProvider.generatePayslip(payslip);
+      payrollProvider.generatePayslip(payslip); // Generate payslip.
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Payslip generated successfully')),
+        const SnackBar(
+            content: Text(
+                'Payslip generated successfully')), // Show success message.
       );
     }
   }
@@ -246,35 +280,37 @@ class _PayslipScreenState extends State<PayslipScreen> {
       builder: (context) => AlertDialog(
         title: Text('Payslip Details',
             style: TextStyle(
-                color: Colors.blue[800], fontWeight: FontWeight.bold)),
+                color: Colors.blue[800],
+                fontWeight: FontWeight.bold)), // Dialog title.
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildPayslipDetailItem('Employee', employee.name),
+              _buildPayslipDetailItem(
+                  'Employee', employee.name), // Employee name.
               _buildPayslipDetailItem('Period',
-                  '${DateFormat('yyyy-MM-dd').format(payslip.payPeriodStart)} to ${DateFormat('yyyy-MM-dd').format(payslip.payPeriodEnd)}'),
+                  '${DateFormat('yyyy-MM-dd').format(payslip.payPeriodStart)} to ${DateFormat('yyyy-MM-dd').format(payslip.payPeriodEnd)}'), // Pay period.
               const Divider(),
-              _buildPayslipDetailItem(
-                  'Base Salary', '₱${payslip.baseSalary.toStringAsFixed(2)}'),
-              _buildPayslipDetailItem(
-                  'Overtime Pay', '₱${payslip.overtimePay.toStringAsFixed(2)}'),
-              _buildPayslipDetailItem(
-                  'Deductions', '₱${payslip.deductions.toStringAsFixed(2)}'),
-              _buildPayslipDetailItem(
-                  'Incentives', '₱${payslip.incentives.toStringAsFixed(2)}'),
+              _buildPayslipDetailItem('Base Salary',
+                  '₱${payslip.baseSalary.toStringAsFixed(2)}'), // Base salary.
+              _buildPayslipDetailItem('Overtime Pay',
+                  '₱${payslip.overtimePay.toStringAsFixed(2)}'), // Overtime pay.
+              _buildPayslipDetailItem('Deductions',
+                  '₱${payslip.deductions.toStringAsFixed(2)}'), // Deductions.
+              _buildPayslipDetailItem('Incentives',
+                  '₱${payslip.incentives.toStringAsFixed(2)}'), // Incentives.
               const Divider(),
               _buildPayslipDetailItem(
                   'Total Pay', '₱${payslip.totalPay.toStringAsFixed(2)}',
-                  isTotal: true),
+                  isTotal: true), // Total pay.
             ],
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+            child: const Text('Close'), // Close button.
           ),
         ],
       ),
@@ -284,16 +320,21 @@ class _PayslipScreenState extends State<PayslipScreen> {
   Widget _buildPayslipDetailItem(String label, String value,
       {bool isTotal = false}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding:
+          const EdgeInsets.symmetric(vertical: 4), // Padding around the item.
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label,
               style: TextStyle(
-                  fontWeight: isTotal ? FontWeight.bold : FontWeight.normal)),
+                  fontWeight: isTotal
+                      ? FontWeight.bold
+                      : FontWeight.normal)), // Label text.
           Text(value,
               style: TextStyle(
-                  fontWeight: isTotal ? FontWeight.bold : FontWeight.normal)),
+                  fontWeight: isTotal
+                      ? FontWeight.bold
+                      : FontWeight.normal)), // Value text.
         ],
       ),
     );

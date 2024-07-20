@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController =
+      TextEditingController(); // Controller for the email input field.
+  final TextEditingController passwordController =
+      TextEditingController(); // Controller for the password input field.
 
   LoginScreen({super.key});
 
@@ -12,11 +14,11 @@ class LoginScreen extends StatelessWidget {
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           if (constraints.maxWidth > 600) {
-            // Desktop layout
-            return _buildDesktopLayout(context);
+            return _buildDesktopLayout(
+                context); // Use desktop layout for larger screens.
           } else {
-            // Mobile layout
-            return _buildMobileLayout(context);
+            return _buildMobileLayout(
+                context); // Use mobile layout for smaller screens.
           }
         },
       ),
@@ -26,7 +28,7 @@ class LoginScreen extends StatelessWidget {
   Widget _buildDesktopLayout(BuildContext context) {
     return Row(
       children: [
-        // Left side with the graphics and branding
+        // Left side with the graphics and branding.
         Expanded(
           flex: 2,
           child: Container(
@@ -53,7 +55,7 @@ class LoginScreen extends StatelessWidget {
             ),
           ),
         ),
-        // Right side with the login form
+        // Right side with the login form.
         Expanded(
           flex: 3,
           child: Center(
@@ -73,7 +75,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  _buildForm(context),
+                  _buildForm(context), // Call to the form widget.
                 ],
               ),
             ),
@@ -115,7 +117,7 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            _buildForm(context),
+            _buildForm(context), // Call to the form widget.
           ],
         ),
       ),
@@ -127,24 +129,26 @@ class LoginScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TextFormField(
-          controller: emailController,
+          controller:
+              emailController, // Attach the controller to the email input field.
           decoration: InputDecoration(
             labelText: 'Email',
             border: const OutlineInputBorder(),
             filled: true,
-            fillColor: Colors.grey[200],
+            fillColor: Colors.grey[200], // Background color of the input field.
           ),
         ),
         const SizedBox(height: 16),
         TextFormField(
-          controller: passwordController,
+          controller:
+              passwordController, // Attach the controller to the password input field.
           decoration: InputDecoration(
             labelText: 'Password',
             border: const OutlineInputBorder(),
             filled: true,
-            fillColor: Colors.grey[200],
+            fillColor: Colors.grey[200], // Background color of the input field.
           ),
-          obscureText: true,
+          obscureText: true, // Hide the text being typed (for passwords).
         ),
         const SizedBox(height: 24),
         ElevatedButton(
@@ -153,10 +157,10 @@ class LoginScreen extends StatelessWidget {
             final String password = passwordController.text.trim();
             if (email == 'juandelacruz@phmi.com' &&
                 password == 'juandelacruz') {
-              // Successful login, navigate to main app
+              // Successful login, navigate to the main app.
               Navigator.pushReplacementNamed(context, '/home');
             } else {
-              // Handle invalid credentials
+              // Handle invalid credentials.
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
@@ -173,7 +177,8 @@ class LoginScreen extends StatelessWidget {
             }
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue[800],
+            backgroundColor:
+                Colors.blue[800], // Background color of the button.
             padding: const EdgeInsets.symmetric(vertical: 16),
             textStyle: const TextStyle(fontSize: 18),
           ),

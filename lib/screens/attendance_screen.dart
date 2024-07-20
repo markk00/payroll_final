@@ -12,23 +12,27 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
-  final _formKey = GlobalKey<FormState>();
-  String? _selectedEmployeeId;
-  DateTime _selectedDate = DateTime.now();
-  final TextEditingController _hoursWorkedController = TextEditingController();
+  final _formKey = GlobalKey<FormState>(); // Key for the form.
+  String? _selectedEmployeeId; // Selected employee ID.
+  DateTime _selectedDate = DateTime.now(); // Default to current date.
+  final TextEditingController _hoursWorkedController =
+      TextEditingController(); // Controller for hours worked input.
 
   @override
   Widget build(BuildContext context) {
-    final employeeProvider = Provider.of<EmployeeProvider>(context);
-    final attendanceProvider = Provider.of<AttendanceProvider>(context);
+    final employeeProvider =
+        Provider.of<EmployeeProvider>(context); // Get employee provider.
+    final attendanceProvider =
+        Provider.of<AttendanceProvider>(context); // Get attendance provider.
 
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(24.0), // Padding around the content.
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment:
+                  CrossAxisAlignment.start, // Align children to start.
               children: [
                 Text(
                   'Record Attendance',
@@ -39,40 +43,53 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                             : Colors.black87,
                       ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 24), // Space between title and form.
                 Card(
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(
+                        12), // Rounded corners for the card.
+                    side: BorderSide(
+                        color: Colors.grey.shade300), // Border color.
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(24),
+                    padding:
+                        const EdgeInsets.all(24), // Padding inside the card.
                     child: Form(
-                      key: _formKey,
+                      key: _formKey, // Form key for validation.
                       child: Column(
                         children: [
-                          _buildEmployeeDropdown(employeeProvider),
-                          const SizedBox(height: 16),
-                          _buildDatePicker(context),
-                          const SizedBox(height: 16),
-                          _buildHoursWorkedField(),
-                          const SizedBox(height: 24),
+                          _buildEmployeeDropdown(
+                              employeeProvider), // Employee dropdown.
+                          const SizedBox(
+                              height:
+                                  16), // Space between dropdown and date picker.
+                          _buildDatePicker(context), // Date picker.
+                          const SizedBox(
+                              height:
+                                  16), // Space between date picker and hours field.
+                          _buildHoursWorkedField(), // Hours worked input field.
+                          const SizedBox(
+                              height:
+                                  24), // Space between hours field and button.
                           SizedBox(
-                            width: double.infinity,
+                            width: double.infinity, // Button takes full width.
                             child: ElevatedButton(
                               onPressed: () => _recordAttendance(
-                                  attendanceProvider, context),
+                                  attendanceProvider,
+                                  context), // Record attendance on press.
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
+                                backgroundColor: Colors.blue, // Button color.
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 16), // Button padding.
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(
+                                      8), // Rounded corners for the button.
                                 ),
                               ),
                               child: const Text('Record Attendance',
-                                  style: TextStyle(fontSize: 16)),
+                                  style:
+                                      TextStyle(fontSize: 16)), // Button text.
                             ),
                           ),
                         ],
@@ -80,16 +97,20 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(
+                    height:
+                        32), // Space between form and attendance records title.
                 Text(
                   'Attendance Records',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue[800],
+                        color: Colors.blue[800], // Color for the title.
                       ),
                 ),
-                const SizedBox(height: 16),
-                _buildAttendanceList(attendanceProvider, employeeProvider),
+                const SizedBox(
+                    height: 16), // Space between title and records list.
+                _buildAttendanceList(attendanceProvider,
+                    employeeProvider), // List of attendance records.
               ],
             ),
           ),
@@ -100,35 +121,41 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   Widget _buildEmployeeDropdown(EmployeeProvider employeeProvider) {
     return DropdownButtonFormField<String>(
-      value: _selectedEmployeeId,
+      value: _selectedEmployeeId, // Current selected value.
       decoration: InputDecoration(
-        labelText: 'Select Employee',
-        prefixIcon: const Icon(Icons.person, color: Colors.grey),
+        labelText: 'Select Employee', // Label for the dropdown.
+        prefixIcon: const Icon(Icons.person,
+            color: Colors.grey), // Icon inside the dropdown.
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderRadius:
+              BorderRadius.circular(8), // Rounded corners for the border.
+          borderSide: BorderSide(color: Colors.grey.shade300), // Border color.
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide:
+              BorderSide(color: Colors.grey.shade300), // Enabled border color.
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.blue),
+          borderSide:
+              const BorderSide(color: Colors.blue), // Focused border color.
         ),
       ),
       items: employeeProvider.employees.map((employee) {
         return DropdownMenuItem<String>(
-          value: employee.id,
-          child: Text(employee.name),
+          value: employee.id, // Value for each dropdown item.
+          child: Text(employee.name), // Display employee name.
         );
       }).toList(),
       onChanged: (value) {
         setState(() {
-          _selectedEmployeeId = value;
+          _selectedEmployeeId = value; // Update selected employee ID.
         });
       },
-      validator: (value) => value == null ? 'Please select an employee' : null,
+      validator: (value) => value == null
+          ? 'Please select an employee'
+          : null, // Validation message.
     );
   }
 
@@ -137,81 +164,100 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       onTap: () async {
         final DateTime? picked = await showDatePicker(
           context: context,
-          initialDate: _selectedDate,
-          firstDate: DateTime(2000),
-          lastDate: DateTime.now(),
+          initialDate: _selectedDate, // Initial date for the picker.
+          firstDate: DateTime(2000), // Earliest selectable date.
+          lastDate: DateTime.now(), // Latest selectable date.
         );
         if (picked != null) {
           setState(() {
-            _selectedDate = picked;
+            _selectedDate = picked; // Update selected date.
           });
         }
       },
       child: InputDecorator(
         decoration: InputDecoration(
-          labelText: 'Date',
-          prefixIcon: const Icon(Icons.calendar_today, color: Colors.grey),
+          labelText: 'Date', // Label for the date picker.
+          prefixIcon: const Icon(Icons.calendar_today,
+              color: Colors.grey), // Icon inside the date picker.
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.grey.shade300),
+            borderRadius:
+                BorderRadius.circular(8), // Rounded corners for the border.
+            borderSide:
+                BorderSide(color: Colors.grey.shade300), // Border color.
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.grey.shade300),
+            borderSide: BorderSide(
+                color: Colors.grey.shade300), // Enabled border color.
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.blue),
+            borderSide:
+                const BorderSide(color: Colors.blue), // Focused border color.
           ),
         ),
-        child: Text(DateFormat('yyyy-MM-dd').format(_selectedDate)),
+        child: Text(DateFormat('yyyy-MM-dd')
+            .format(_selectedDate)), // Display selected date.
       ),
     );
   }
 
   Widget _buildHoursWorkedField() {
     return TextFormField(
-      controller: _hoursWorkedController,
+      controller: _hoursWorkedController, // Controller for hours worked input.
       decoration: InputDecoration(
-        labelText: 'Hours Worked',
-        prefixIcon: const Icon(Icons.access_time, color: Colors.grey),
+        labelText: 'Hours Worked', // Label for the input field.
+        prefixIcon: const Icon(Icons.access_time,
+            color: Colors.grey), // Icon inside the input field.
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderRadius:
+              BorderRadius.circular(8), // Rounded corners for the border.
+          borderSide: BorderSide(color: Colors.grey.shade300), // Border color.
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide:
+              BorderSide(color: Colors.grey.shade300), // Enabled border color.
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.blue),
+          borderSide:
+              const BorderSide(color: Colors.blue), // Focused border color.
         ),
       ),
-      keyboardType: TextInputType.number,
-      validator: (value) => value!.isEmpty ? 'Please enter hours worked' : null,
+      keyboardType: TextInputType.number, // Numeric keyboard for hours input.
+      validator: (value) => value!.isEmpty
+          ? 'Please enter hours worked'
+          : null, // Validation message.
     );
   }
 
   Widget _buildAttendanceList(AttendanceProvider attendanceProvider,
       EmployeeProvider employeeProvider) {
     return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: attendanceProvider.attendanceRecords.length,
+      shrinkWrap: true, // Allow the list to take only the required space.
+      physics:
+          const NeverScrollableScrollPhysics(), // Disable scrolling for the list.
+      itemCount: attendanceProvider
+          .attendanceRecords.length, // Number of items in the list.
       itemBuilder: (context, index) {
         final attendance = attendanceProvider.attendanceRecords[index];
-        final employee = employeeProvider.getEmployee(attendance.employeeId);
+        final employee = employeeProvider
+            .getEmployee(attendance.employeeId); // Get employee details.
         return Card(
-          elevation: 2,
-          margin: const EdgeInsets.symmetric(vertical: 8),
+          elevation: 2, // Card elevation.
+          margin:
+              const EdgeInsets.symmetric(vertical: 8), // Margin between cards.
           child: ListTile(
             leading: CircleAvatar(
-              child: Text(employee.name[0]),
+              child: Text(
+                  employee.name[0]), // Display first letter of employee name.
             ),
-            title: Text(employee.name),
-            subtitle: Text(DateFormat('yyyy-MM-dd').format(attendance.date)),
-            trailing: Text('${attendance.hoursWorked} hours'),
+            title: Text(employee.name), // Display employee name.
+            subtitle: Text(DateFormat('yyyy-MM-dd')
+                .format(attendance.date)), // Display attendance date.
+            trailing: Text(
+                '${attendance.hoursWorked} hours'), // Display hours worked.
           ),
         );
       },
@@ -221,16 +267,19 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   void _recordAttendance(
       AttendanceProvider attendanceProvider, BuildContext context) {
     if (_formKey.currentState!.validate()) {
+      // Validate the form.
       attendanceProvider.addAttendance(Attendance(
         employeeId: _selectedEmployeeId!,
         date: _selectedDate,
         hoursWorked: double.parse(_hoursWorkedController.text),
-      ));
+      )); // Add attendance record.
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Attendance recorded successfully')),
+        const SnackBar(
+            content: Text(
+                'Attendance recorded successfully')), // Show success message.
       );
-      _formKey.currentState!.reset();
-      _hoursWorkedController.clear();
+      _formKey.currentState!.reset(); // Reset the form.
+      _hoursWorkedController.clear(); // Clear hours worked input.
     }
   }
 }
