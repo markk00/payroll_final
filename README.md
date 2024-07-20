@@ -46,7 +46,18 @@ Police Hotline Movement Incorporated is a Flutter application designed to manage
 This app does not use a database. All data is stored in local variables, meaning the data will be lost when the app is closed or restarted.
 
 ## Screenshots
-Add screenshots of the app here.
+### Home Screen
+![Dashboard](screenshot/dashboard.jpg)
+
+### Employee
+![Employee](screenshot/employee.jpg)
+
+### Attendance
+![Attendance](screenshot/attendance.jpg)
+
+### Payslip
+![Payslip](screenshot/payslip.jpg)
+
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
